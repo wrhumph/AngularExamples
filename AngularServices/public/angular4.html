@@ -15,8 +15,7 @@
         </div>
         <div class="row">
             <div class="col-sm-3">
-                <h4>Links</h4>
-                <div id='menu'></div>
+                <<div id='menu' ng-include="'menu.html'"></div>
             </div>
             <div class="col-sm-9">
                 <h3>Factory Example</h3>
@@ -78,7 +77,6 @@
       };
 
       $(document).ready(function () {
-        create_menu($('#menu'));
       })
 
 
