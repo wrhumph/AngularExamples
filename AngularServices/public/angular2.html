@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Angular 2</title>
+    <script data-require="jquery@2.1.3" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body ng-app="app">
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Angular Examples</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <h4>Links</h4>
+                <div id='menu'></div>
+            </div>
+            <div class="col-sm-9">
+                <h3>Provider Example</h3>
+                <p>This example uses two controllers, Main1Controller and Main2Controller, and a provider named "info".
+                    The provider provides two data items, appName and appDesc, and is injected into each of the controllers.
+                    Main1Controller uses $scope injection.  Main2Controller uses "controller as" syntax.
+                </p>
+                <p>I could not get Main2Controller to work when defined with an anonymous function.  Injection of the
+                    provider was failing.  I got it to work by defining it as a regular function.
+                </p>
+                <p>Using $scope injection</p>
+                <div ng-controller="main1Controller" class='well'>
+                    <p>App name is {{ AppName }}</p>
+                    <p>Today is {{ Date }}</p>
+                </div>
+                <hr>
+                <p>Using "controller as" style</p>
+                <div class='well' ng-controller="main2Controller as main2" class='well'>
+                    <p>App name is {{ main2.AppName }}</p>
+                    <p>Today is {{ main2.Date }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="site.js"></script>
+    
+    <script>
+      var app = angular.module("app", []);
+
+      app.config(function($provide) {
+        $provide.provider('info', function() {
+            this.$get = function() {
+                return {
+                    appName: "Angular 2 - Provider Example",
+                    appDesc: "A provider example."
+                };
+            }
+        });
+      });
+
+      // controller using $scope injection
+      app.controller("main1Controller", function($scope, info) {
+        $scope.Date = "(main1) " + new Date();
+        $scope.AppName = info.appName;
+      });
+
+      // controller for "xxx as yyy" style
+      app.controller("main2Controller", Main2);
+
+      function Main2(info) {
+        var vm = this;
+        vm.Date = "(main2) " + new Date();
+        vm.AppName = info.appName;
+      };
+
+      $(document).ready(function () {
+        create_menu($('#menu'));
+      })
+
+
+
+    </script>
+  
+  </body>
+
+</html>

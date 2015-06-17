@@ -1,0 +1,11 @@
+{
+  "name": "ExpressTemplate",
+  "version": "1.0.0",
+  "description": "A NodeJS / Express project template",
+  "main": "server.js",
+  "dependencies": {
+    "express": "*"
+  },
+  "author": "Pete Humphrey",
+  "license": "None"
+}
