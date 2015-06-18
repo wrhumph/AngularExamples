@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ajax Controller</title>
+    <script data-require="jquery@2.1.3" data-semver="2.1.3" src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body ng-app="app">
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Angular Examples</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div id='menu' ng-include="'menu.html'"></div>
+            </div>
+            <div class="col-sm-9">
+                <h3>Controller with Ajax</h3>
+                <p>This example illustrates the use of a controller that calls an Ajax function on the
+                    back end to populate a table of stock prices.
+                </p>
+
+               <div id='main' ng-controller="main2Controller as main2" style='display:none'>
+                   <p>
+                       Symbols: <input id='stock-symbols' ng-model='main2.symbols' style='width:300px'></input>
+                       <button id='refresh-button' class='button' ng-click="main2.refresh()">Refresh</button>
+                   </p>
+                   <table class='table table-striped'>
+                      <thead>
+                          <tr><th>Symbol</th><th>Price</th></tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="quote in main2.quotes">
+                              <td>{{quote.t}}</td>
+                              <td>{{quote.l}}</td>
+                          </tr>
+                      </tbody>
+                   </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="site.js"></script>
+    
+    <script>
+      var AjaxResult;
+      var app = angular.module("app", []);
+
+      app.factory('infoFactory', infoFactory);  // anonymous functions work here too
+
+      function infoFactory() {
+      }
+
+
+      // controller for "xxx as yyy" style
+      app.controller("main2Controller", Main2);
+
+      function Main2($http) {
+        var vm = this;
+        vm.Date = "(main2) " + new Date();
+        vm.symbols = ['APL', 'GLD', 'SPY', 'VFIIX'];
+        vm.quotes = [];
+        
+        vm.refresh = function() { get_quotes(); }
+        
+        get_quotes();
+        
+        function get_quotes() {
+          $http.get("/test?symbols=" + vm.symbols)
+            .success(function(data, status, headers, config) {
+                console.log("Have Ajax result");
+                AjaxResult = data;
+                vm.quotes = data;
+                $('#main').show(500);
+            })
+            .error(function(data, status, headers, config) {
+                console.log('ERROR');
+            });
+         }
+
+      };
+
+      $(document).ready(function () {
+          $('#stock-symbols').keypress(function(e) {
+              if (e.keyCode==13) $('#refresh-button').click();
+          });
+      });
+
+
+
+    </script>
+  
+  </body>
+
+</html>
+
+
